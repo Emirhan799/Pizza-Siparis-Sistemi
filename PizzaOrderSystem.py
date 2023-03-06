@@ -83,6 +83,72 @@ class Corn(Decorator):
     def __init__(self, component):
         super().__init__(component, 'Mısırlı',5.0)
 
+def TC_control(value):
+    value = str(value)
+    
+    # 11 hanelidir.
+    if not len(value) == 11:
+        return False
+    
+    # Sadece rakamlardan olusur.
+    if not value.isdigit():
+        return False
+    
+    # Ilk hanesi 0 olamaz.
+    if int(value[0]) == 0:
+        return False
+    
+    digits = [int(d) for d in str(value)]
+    
+    # 1. 2. 3. 4. 5. 6. 7. 8. 9. ve 10. hanelerin toplamından elde edilen sonucun
+    # 10'a bölümünden kalan, yani Mod10'u bize 11. haneyi verir.
+    if not sum(digits[:10]) % 10 == digits[10]:
+        return False
+    
+    # 1. 3. 5. 7. ve 9. hanelerin toplamının 7 katından, 2. 4. 6. ve 8. hanelerin toplamı çıkartıldığında,
+    # elde edilen sonucun 10'a bölümünden kalan, yani Mod10'u bize 10. haneyi verir.
+    if not (((7 * sum(digits[:9][-1::-2])) - sum(digits[:9][-2::-2])) % 10) == digits[9]:
+        return False
+    
+    # Butun kontrollerden gecti.
+    return True
+
+
+def CC_control(value):
+    value = str(value)
+    
+    # 16 hanelidir.
+    if not len(value) == 16:
+        return False
+    
+    # Sadece rakamlardan olusur.
+    if not value.isdigit():
+        return False
+    
+    # Butun kontrollerden gecti.
+    return True
+
+
+def CC_pass_control(value):
+    value = str(value)
+    
+    # 4 hanelidir.
+    if not len(value) == 4:
+        return False
+    
+    # Sadece rakamlardan olusur.
+    if not value.isdigit():
+        return False
+    
+    # Butun kontrollerden gecti.
+    return True
+
+
+# şuanın tarihini al ve formata uygun hale getir
+def Time():
+    return datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+
 # main foksiyonu çağırılması (menünün yazılması)
 if __name__ == '__main__':
     main()
@@ -140,54 +206,60 @@ total_cost = sauce.get_cost()
 # pizza, sos seçimini ve toplam fiyatı yazdır
 print(f'\nSeçiminiz : {sauce.get_description()}\nToplam tutar: {total_cost:.2f} TL\n')
 
-# sipariş onayı iste
-aprvl = input('Siparişi Onayla (e/h)')
+# sipariş onayı kontrol
+while True:
+    # sipariş onayı iste
+    aprvl = input('Siparişi Onayla (e/h)').lower()
 
-# onay verilir ise gir
-if aprvl == 'e':
+    # onay verilir ise gir
+    if aprvl == 'e':
     
-    name = input('\nLütfen isminizi giriniz: ')
+        name = input('\nLütfen isminizi giriniz: ')
 
-    # TC no denetimi yap doğru değil ise tekrar sor
-    while True:
-        try:
-            id_num = int(input('Lütfen TC kimlik numaranızı giriniz: '))
-            if len(str(id_num)) == 11:
+        #TC No kontrol
+        while True:
+            id_num = input('Lütfen TC kimlik numaranızı giriniz: ')
+            if TC_control(id_num) is True:
                 break
             else:
-                print('TC kimlik numarası 11 haneli ve rakamlardan oluşmalıdır\n')
-        except:
-            print('TC kimlik numarası 11 haneli ve rakamlardan oluşmalıdır\n')
+                print('Hatalı TC NO\n')
 
-    # CC no denetimi yap doğru değil ise tekrar sor        
-    while True:
-        try:
-            cc_num = int(input('Lütfen kredi kartı numaranızı giriniz: '))
-            if len(str(cc_num)) == 16:
+        #CC No kontrol
+        while True:
+            cc_num = input('Lütfen kredi kartı numaranızı giriniz: ')
+            if CC_control(cc_num) is True:
                 break
             else:
                 print('Kart numarası 16 haneli ve rakamlardan oluşmalıdır\n')
-        except:
-            print('Kart numarası 16 haneli ve rakamlardan oluşmalıdır\n')
-            
-    cc_password = input('Lütfen kredi kartı şifrenizi giriniz: ')
-    
-    # şuanın tarihini al ve formata uygun hale getir
-    now = datetime.datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    
-    # csv dosyasını aç eğer yok ise oluştur ve kullanıcı bilgilerini, siparişi, tutarı ve zamanı yaz
-    with open('Orders_Database.csv', 'a') as db_file:
-        db_writer = csv.writer(db_file)
-        db_writer.writerow([name, id_num, sauce.get_description(), total_cost, cc_num, cc_password, dt_string])
-    
-    print(f'\nTeşekkürler {name}! {sauce.get_description()} siparişiniz alınmıştır.')
-    print(f'Toplam tutar: {total_cost:.2f} TL')
 
-# onay verilmez ise iptal et ve çık
-else:
-    print('Seçiminiz iptal edildi')
-    exit
+        #CC password kontrol
+        while True:
+            cc_password = input('Lütfen kredi kartı şifrenizi giriniz: ')
+            if CC_pass_control(cc_password) is True:
+                break
+            else:
+                print('Kart şifresi 4 haneli ve rakamlardan oluşmalıdır\n')
+
+        
+        dt_string = Time()
+
+        # csv dosyasını aç eğer yok ise oluştur ve kullanıcı bilgilerini, siparişi, tutarı ve zamanı yaz
+        with open('Orders_Database.csv', 'a') as db_file:
+            db_writer = csv.writer(db_file)
+            db_writer.writerow([name, id_num, sauce.get_description(), total_cost, cc_num, cc_password, dt_string])
+
+        print(f'\nTeşekkürler {name}! {sauce.get_description()} siparişiniz alınmıştır.')
+        print(f'Toplam tutar: {total_cost:.2f} TL')
+        break
+
+    # onay verilmez ise iptal et ve çık
+    elif aprvl == 'h':
+        print('Seçiminiz iptal edildi')
+        break
+        
+    # yanlış tuşlanırsa tekrar sor (while a geri dön)
+    else:
+        print('\nHatalı giriş\nLütfen tekrar giriniz.\n')
 
 
 
