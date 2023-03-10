@@ -156,45 +156,45 @@ if __name__ == '__main__':
 # pizza seçimi koşulu sağlamıyorsa tekrar sor
 while True:
     
-    pizza_choice = int(input('Pizza seçiniz (1-4): '))
+    pizza_choice = input('Pizza seçiniz (1-4): ')
 
     # gelen veriye göre pizza seç
-    if pizza_choice == 1:
+    if pizza_choice == '1':
         pizza = KlasikPizza()
         break
-    elif pizza_choice == 2:
+    elif pizza_choice == '2':
         pizza = MargaritaPizza()
         break
-    elif pizza_choice == 3:
+    elif pizza_choice == '3':
         pizza = TurkPizza()
         break
-    elif pizza_choice == 4:
+    elif pizza_choice == '4':
         pizza = SadePizza()
         break
     else:
         print('Geçersiz pizza kodu.\n')
 
-# sos seçimi koşulu sağlamıyorsa tekrar sorr
+# sos seçimi koşulu sağlamıyorsa tekrar sor
 while True:
     
-    sauce_choice = int(input('Sos seçiniz (11-16): '))
+    sauce_choice = input('Sos seçiniz (11-16): ')
 
-    if sauce_choice == 11:
+    if sauce_choice == '11':
         sauce = Olives(pizza)
         break
-    elif sauce_choice == 12:
+    elif sauce_choice == '12':
         sauce = Mushrooms(pizza)
         break
-    elif sauce_choice == 13:
+    elif sauce_choice == '13':
         sauce = GoatCheese(pizza)
         break
-    elif sauce_choice == 14:
+    elif sauce_choice == '14':
         sauce = Meat(pizza)
         break
-    elif sauce_choice == 15:
+    elif sauce_choice == '15':
         sauce = Onions(pizza)
         break
-    elif sauce_choice == 16:
+    elif sauce_choice == '16':
         sauce = Corn(pizza)
         break
     else:   
