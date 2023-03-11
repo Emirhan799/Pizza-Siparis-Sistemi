@@ -83,6 +83,11 @@ class Corn(Decorator):
     def __init__(self, component):
         super().__init__(component, 'Mısırlı',5.0)
 
+
+def Name_control(value):
+    return not any(char.isdigit() for char in value)
+
+
 def TC_control(value):
     value = str(value)
     
@@ -155,50 +160,55 @@ if __name__ == '__main__':
 
 # pizza seçimi koşulu sağlamıyorsa tekrar sor
 while True:
-    
-    pizza_choice = input('Pizza seçiniz (1-4): ')
-
-    # gelen veriye göre pizza seç
-    if pizza_choice == '1':
-        pizza = KlasikPizza()
-        break
-    elif pizza_choice == '2':
-        pizza = MargaritaPizza()
-        break
-    elif pizza_choice == '3':
-        pizza = TurkPizza()
-        break
-    elif pizza_choice == '4':
-        pizza = SadePizza()
-        break
-    else:
+    try:
+        pizza_choice = int(input('Pizza seçiniz (1-4): '))
+    except:
         print('Geçersiz pizza kodu.\n')
+    else:
+        # gelen veriye göre pizza seç
+        if pizza_choice == 1:
+            pizza = KlasikPizza()
+            break
+        elif pizza_choice == 2:
+            pizza = MargaritaPizza()
+            break
+        elif pizza_choice == 3:
+            pizza = TurkPizza()
+            break
+        elif pizza_choice == 4:
+            pizza = SadePizza()
+            break
+        else:
+            print('Geçersiz pizza kodu.\n')
+    
 
 # sos seçimi koşulu sağlamıyorsa tekrar sor
 while True:
-    
-    sauce_choice = input('Sos seçiniz (11-16): ')
-
-    if sauce_choice == '11':
-        sauce = Olives(pizza)
-        break
-    elif sauce_choice == '12':
-        sauce = Mushrooms(pizza)
-        break
-    elif sauce_choice == '13':
-        sauce = GoatCheese(pizza)
-        break
-    elif sauce_choice == '14':
-        sauce = Meat(pizza)
-        break
-    elif sauce_choice == '15':
-        sauce = Onions(pizza)
-        break
-    elif sauce_choice == '16':
-        sauce = Corn(pizza)
-        break
-    else:   
+    try:
+        sauce_choice = int(input('Sos seçiniz (11-16): '))
+    except:
         print('Geçersiz sos kodu.\n')
+    else:
+        if sauce_choice == 11:
+            sauce = Olives(pizza)
+            break
+        elif sauce_choice == 12:
+            sauce = Mushrooms(pizza)
+            break
+        elif sauce_choice == 13:
+            sauce = GoatCheese(pizza)
+            break
+        elif sauce_choice == 14:
+            sauce = Meat(pizza)
+            break
+        elif sauce_choice == 15:
+            sauce = Onions(pizza)
+            break
+        elif sauce_choice == 16:
+            sauce = Corn(pizza)
+            break
+        else:   
+            print('Geçersiz sos kodu.\n')
 
 
 total_cost = sauce.get_cost()
@@ -213,8 +223,14 @@ while True:
 
     # onay verilir ise gir
     if aprvl == 'e':
-    
-        name = input('\nLütfen isminizi giriniz: ')
+        
+        #isim kontrol
+        while True:
+            name = input('\nLütfen isminizi giriniz: ')
+            if Name_control(name) is True:
+                break
+            else:
+                print('İsim rakam içeremez')
 
         #TC No kontrol
         while True:
@@ -256,25 +272,6 @@ while True:
     elif aprvl == 'h':
         print('Seçiminiz iptal edildi')
         break
-        
-    # yanlış tuşlanırsa tekrar sor (while a geri dön)
     else:
         print('\nHatalı giriş\nLütfen tekrar giriniz.\n')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
