@@ -3,8 +3,12 @@ import datetime
 
 # menü listesinin Menu.txt'den okunması
 def read_menu_list():
-    with open('Menu.txt', 'r') as menu_file:
-        print(menu_file.read())
+    try:
+        with open('Menu.txt', 'r') as menu_file:
+            print(menu_file.read())
+    except:
+        print('\nMenü bulunamadı. Lütfen Menu.txt dosyasının varlığını kontrol edin\n')
+        exit()
 
 # main fonksiyonu (menüyü çağırır)
 def main():
